@@ -27,7 +27,10 @@ A `postcss.config.js` exists at the project root with no plugins. This is intent
 This is a single-page React app with no routing, no state management library, and no backend.
 
 - `src/main.jsx` — entry point, mounts `<App />` into `#root`
-- `src/App.jsx` — the entire application: all state, logic, and UI live here
+- `src/App.jsx` — root component; holds the `transactions` array state and wires child components together
+- `src/Summary.jsx` — receives `transactions`, computes and displays total income, expenses, and balance
+- `src/TransactionForm.jsx` — owns its own form state; calls `onAdd(transaction)` prop when submitted
+- `src/TransactionList.jsx` — receives `transactions`, owns its own filter state, renders the table
 - `src/App.css` / `src/index.css` — plain CSS, no utility framework
 
-All transaction state is held in a single `useState` array in `App.jsx`. There is no persistence (data resets on refresh). The app intentionally ships with a bug and rough UI as part of a course exercise.
+State ownership: `transactions` lives in `App` and is the single source of truth. Each child owns only the UI state it needs (`TransactionForm` owns form fields, `TransactionList` owns filter selections). There is no persistence — data resets on refresh.
