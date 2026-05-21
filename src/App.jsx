@@ -73,8 +73,6 @@ function App() {
     setEditingTransaction(null);
   };
 
-  const handleCancelEdit = () => setEditingTransaction(null);
-
   const handleDelete = (id) => {
     setTransactions(transactions.filter(t => t.id !== id));
     if (editingTransaction?.id === id) setEditingTransaction(null);
@@ -117,7 +115,7 @@ function App() {
         onAdd={handleAdd}
         editingTransaction={editingTransaction}
         onUpdate={handleUpdate}
-        onCancelEdit={handleCancelEdit}
+        onCancelEdit={() => setEditingTransaction(null)}
       />
       <TransactionList
         transactions={transactions}
