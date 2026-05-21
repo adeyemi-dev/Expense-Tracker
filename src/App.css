@@ -765,32 +765,102 @@ td {
   to   { opacity: 1; transform: scale(1)    translateY(0); }
 }
 
-/* Responsive */
-@media (max-width: 680px) {
+/* ── Tablet (≤ 768px) ───────────────────────────────────────── */
+@media (max-width: 768px) {
+  .app { padding: 20px 16px 48px; }
+
+  /* Summary: 2 × 2 grid */
   .summary {
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
   }
 
+  /* Form: description full-width, rest 3-col */
   .form-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
   }
-
-  .form-grid .form-field:first-child {
-    grid-column: 1 / -1;
-  }
-
+  .form-grid .form-field:first-child { grid-column: 1 / -1; }
   .form-grid .form-actions {
     grid-column: 1 / -1;
     justify-content: flex-end;
   }
 
+  /* Search + filters stack */
   .list-controls {
     flex-direction: column;
     align-items: stretch;
   }
+  .filters { flex-wrap: wrap; }
 
-  .filters { justify-content: flex-end; }
-
+  /* Hide date column */
   .th-date, .td-date { display: none; }
+
+  /* Auth card slightly tighter */
+  .auth-card { padding: 28px 24px 22px; }
+}
+
+/* ── Mobile (≤ 480px) ───────────────────────────────────────── */
+@media (max-width: 480px) {
+  .app { padding: 14px 12px 40px; }
+
+  /* Card padding */
+  .card { padding: 16px; }
+
+  /* Header: allow wrap so actions drop below brand on tiny screens */
+  .header {
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .header-brand { flex: 1; min-width: 0; }
+  .header-title { font-size: 17px; }
+  .header-icon  { font-size: 24px; }
+  /* Hide "Light / Dark" label — keep only the emoji */
+  .toggle-label { display: none; }
+  .theme-toggle { padding: 8px 10px; }
+  .logout-btn   { padding: 8px 12px; font-size: 12px; }
+
+  /* Summary: 2 × 2, more compact */
+  .summary { gap: 10px; }
+  .summary-card { padding: 14px 14px; }
+  .income-amount,
+  .expense-amount,
+  .savings-amount,
+  .balance-amount { font-size: 17px; }
+  .summary-card-label { font-size: 10px; }
+
+  /* Form: single column */
+  .form-grid { grid-template-columns: 1fr; }
+  .form-grid .form-field:first-child { grid-column: auto; }
+  .form-grid .form-actions {
+    grid-column: auto;
+    flex-direction: column;
+    width: 100%;
+  }
+  .form-actions .btn-primary,
+  .form-actions .btn-secondary { width: 100%; text-align: center; justify-content: center; }
+
+  /* Section header: wrap export button below title */
+  .section-header { flex-wrap: wrap; gap: 8px; }
+  .export-btn { width: 100%; justify-content: center; }
+
+  /* Table: hide date and category */
+  .th-date,     .td-date     { display: none; }
+  .th-category, .td-category { display: none; }
+
+  /* Compact action buttons */
+  .edit-btn   { padding: 5px 9px; font-size: 11px; margin-right: 4px; }
+  .delete-btn { padding: 5px 9px; font-size: 11px; }
+
+  /* Auth */
+  .auth-card        { padding: 22px 18px 18px; }
+  .auth-brand-icon  { font-size: 34px; }
+  .auth-title       { font-size: 19px; }
+  .auth-theme-toggle { top: 12px; right: 12px; padding: 6px 10px; }
+
+  /* Dialog */
+  .dialog { padding: 24px 18px 20px; }
+  .dialog-actions { flex-direction: column; }
+  .btn-danger,
+  .dialog-actions .btn-secondary { width: 100%; }
 }

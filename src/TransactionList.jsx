@@ -104,7 +104,7 @@ function TransactionList({ transactions, onEdit, onDelete }) {
           <tr>
             <th className="th-date">Date</th>
             <th>Description</th>
-            <th>Category</th>
+            <th className="th-category">Category</th>
             <th className="th-amount">Amount</th>
             <th className="th-action"></th>
           </tr>
@@ -122,7 +122,7 @@ function TransactionList({ transactions, onEdit, onDelete }) {
             <tr key={t.id}>
               <td className="td-date">{t.date}</td>
               <td className="td-description">{t.description}</td>
-              <td>
+              <td className="td-category">
                 <span className="category-badge">
                   {categoryIcons[t.category] || '🗂️'} {toTitleCase(t.category)}
                 </span>

@@ -104,7 +104,7 @@ function App() {
         </div>
         <div className="header-actions">
           <button className="theme-toggle" onClick={() => setIsDark(d => !d)}>
-            {isDark ? '☀️ Light' : '🌙 Dark'}
+            {isDark ? '☀️' : '🌙'}<span className="toggle-label">{isDark ? ' Light' : ' Dark'}</span>
           </button>
           <button className="logout-btn" onClick={handleLogout}>
             Log Out
