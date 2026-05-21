@@ -1,58 +1,110 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
-const categories = ["food", "housing", "utilities", "transport", "entertainment", "salary", "other"];
+const categories = [
+  "food", "groceries", "rent", "housing", "utilities", "phone bill",
+  "transport", "entertainment", "clothing", "salary", "savings", "black tax", "miscellaneous",
+];
 
-function TransactionForm({ onAdd }) {
+const toTitleCase = (str) => str.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+
+function TransactionForm({ onAdd, editingTransaction, onUpdate, onCancelEdit }) {
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [type, setType] = useState("expense");
   const [category, setCategory] = useState("food");
+  const cardRef = useRef(null);
+
+  useEffect(() => {
+    if (editingTransaction) {
+      setDescription(editingTransaction.description);
+      setAmount(String(editingTransaction.amount));
+      setType(editingTransaction.type);
+      setCategory(editingTransaction.category);
+      cardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } else {
+      setDescription("");
+      setAmount("");
+      setType("expense");
+      setCategory("food");
+    }
+  }, [editingTransaction]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!description || !amount) return;
 
-    onAdd({
-      id: Date.now(),
+    const transaction = {
+      id: editingTransaction ? editingTransaction.id : Date.now(),
       description,
       amount: parseFloat(amount),
       type,
       category,
-      date: new Date().toISOString().split('T')[0],
-    });
+      date: editingTransaction ? editingTransaction.date : new Date().toISOString().split('T')[0],
+    };
 
-    setDescription("");
-    setAmount("");
-    setType("expense");
-    setCategory("food");
+    if (editingTransaction) {
+      onUpdate(transaction);
+    } else {
+      onAdd(transaction);
+    }
   };
 
   return (
-    <div className="add-transaction">
-      <h2>Add Transaction</h2>
+    <div ref={cardRef} className={`card${editingTransaction ? ' editing' : ''}`}>
+      <h2 className="card-title">
+        {editingTransaction ? '✏️ Edit Transaction' : 'Add Transaction'}
+      </h2>
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-        <input
-          type="number"
-          placeholder="Amount"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-        />
-        <select value={type} onChange={(e) => setType(e.target.value)}>
-          <option value="income">Income</option>
-          <option value="expense">Expense</option>
-        </select>
-        <select value={category} onChange={(e) => setCategory(e.target.value)}>
-          {categories.map(cat => (
-            <option key={cat} value={cat}>{cat}</option>
-          ))}
-        </select>
-        <button type="submit">Add</button>
+        <div className="form-grid">
+          <div className="form-field">
+            <label className="form-label">Description</label>
+            <input
+              className="form-input"
+              type="text"
+              placeholder="e.g. Coffee, Rent…"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </div>
+          <div className="form-field">
+            <label className="form-label">Amount</label>
+            <input
+              className="form-input"
+              type="number"
+              placeholder="0.00"
+              min="0"
+              step="0.01"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+            />
+          </div>
+          <div className="form-field">
+            <label className="form-label">Type</label>
+            <select className="form-select" value={type} onChange={(e) => setType(e.target.value)}>
+              <option value="income">Income</option>
+              <option value="expense">Expense</option>
+              <option value="savings">Savings</option>
+            </select>
+          </div>
+          <div className="form-field">
+            <label className="form-label">Category</label>
+            <select className="form-select" value={category} onChange={(e) => setCategory(e.target.value)}>
+              {categories.map(cat => (
+                <option key={cat} value={cat}>{toTitleCase(cat)}</option>
+              ))}
+            </select>
+          </div>
+          <div className="form-actions">
+            {editingTransaction && (
+              <button type="button" className="btn-secondary" onClick={onCancelEdit}>
+                Cancel
+              </button>
+            )}
+            <button type="submit" className="btn-primary">
+              {editingTransaction ? 'Update' : 'Add'}
+            </button>
+          </div>
+        </div>
       </form>
     </div>
   );
