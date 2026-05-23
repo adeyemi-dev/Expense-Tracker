@@ -3,7 +3,7 @@ import ConfirmDialog from './ConfirmDialog'
 
 const categories = [
   "food", "groceries", "rent", "housing", "utilities", "phone bill",
-  "transport", "entertainment", "clothing", "salary", "savings", "black tax", "miscellaneous",
+  "transport", "entertainment", "clothing", "salary", "savings", "black tax", "debt", "miscellaneous",
 ];
 
 const categoryIcons = {
@@ -19,6 +19,7 @@ const categoryIcons = {
   salary: '💼',
   savings: '🏦',
   'black tax': '🤝',
+  debt: '💳',
   miscellaneous: '🗂️',
 };
 

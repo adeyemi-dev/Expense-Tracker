@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 
 const categories = [
   "food", "groceries", "rent", "housing", "utilities", "phone bill",
-  "transport", "entertainment", "clothing", "salary", "savings", "black tax", "miscellaneous",
+  "transport", "entertainment", "clothing", "salary", "savings", "black tax", "debt", "miscellaneous",
 ];
 
 const toTitleCase = (str) => str.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
