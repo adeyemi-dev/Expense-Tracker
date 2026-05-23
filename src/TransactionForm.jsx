@@ -10,8 +10,8 @@ const toTitleCase = (str) => str.split(' ').map(w => w.charAt(0).toUpperCase() +
 function TransactionForm({ onAdd, editingTransaction, onUpdate, onCancelEdit }) {
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
-  const [type, setType] = useState("expense");
-  const [category, setCategory] = useState("food");
+  const [type, setType] = useState("");
+  const [category, setCategory] = useState("");
   const [customCategory, setCustomCategory] = useState("");
   const cardRef = useRef(null);
 
@@ -20,22 +20,22 @@ function TransactionForm({ onAdd, editingTransaction, onUpdate, onCancelEdit }) 
       const isKnown = categories.includes(editingTransaction.category);
       setDescription(editingTransaction.description);
       setAmount(String(editingTransaction.amount));
-      setType(editingTransaction.type);
+      setType(editingTransaction.type || "");
       setCategory(isKnown ? editingTransaction.category : "other");
       setCustomCategory(isKnown ? "" : editingTransaction.category);
       cardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     } else {
       setDescription("");
       setAmount("");
-      setType("expense");
-      setCategory("food");
+      setType("");
+      setCategory("");
       setCustomCategory("");
     }
   }, [editingTransaction]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!description || !amount) return;
+    if (!description || !amount || !type || !category) return;
     if (category === "other" && !customCategory.trim()) return;
 
     const resolvedCategory = category === "other" ? customCategory.trim().toLowerCase() : category;
@@ -55,8 +55,8 @@ function TransactionForm({ onAdd, editingTransaction, onUpdate, onCancelEdit }) 
       onAdd(transaction);
       setDescription("");
       setAmount("");
-      setType("expense");
-      setCategory("food");
+      setType("");
+      setCategory("");
       setCustomCategory("");
     }
   };
@@ -92,7 +92,8 @@ function TransactionForm({ onAdd, editingTransaction, onUpdate, onCancelEdit }) 
           </div>
           <div className="form-field">
             <label className="form-label">Type</label>
-            <select className="form-select" value={type} onChange={(e) => setType(e.target.value)}>
+            <select className="form-select" value={type} onChange={(e) => setType(e.target.value)} required>
+              <option value="" disabled>Select type…</option>
               <option value="income">Income</option>
               <option value="expense">Expense</option>
               <option value="savings">Savings</option>
@@ -100,7 +101,8 @@ function TransactionForm({ onAdd, editingTransaction, onUpdate, onCancelEdit }) 
           </div>
           <div className="form-field">
             <label className="form-label">Category</label>
-            <select className="form-select" value={category} onChange={(e) => setCategory(e.target.value)}>
+            <select className="form-select" value={category} onChange={(e) => setCategory(e.target.value)} required>
+              <option value="" disabled>Select category…</option>
               {categories.map(cat => (
                 <option key={cat} value={cat}>{toTitleCase(cat)}</option>
               ))}
