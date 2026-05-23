@@ -24,20 +24,39 @@ const categoryIcons = {
 
 const toTitleCase = (str) => str.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 
+function SortIcon({ column, sortBy, sortDir }) {
+  if (sortBy !== column) return <span className="sort-icon sort-icon--inactive">↕</span>;
+  return <span className="sort-icon">{sortDir === 'asc' ? '↑' : '↓'}</span>;
+}
+
 function TransactionList({ transactions, onEdit, onDelete }) {
   const [search, setSearch] = useState("");
   const [filterType, setFilterType] = useState("all");
   const [filterCategory, setFilterCategory] = useState("all");
+  const [filterMonth, setFilterMonth] = useState("all");
+  const [sortBy, setSortBy] = useState("date");
+  const [sortDir, setSortDir] = useState("desc");
   const [pendingDelete, setPendingDelete] = useState(null);
 
+  const months = [...new Set(transactions.map(t => t.date.slice(0, 7)))].sort().reverse();
+
+  const handleSort = (col) => {
+    if (sortBy === col) setSortDir(d => d === 'asc' ? 'desc' : 'asc');
+    else { setSortBy(col); setSortDir(col === 'date' ? 'desc' : 'desc'); }
+  };
+
   let filtered = transactions;
-  if (search.trim()) {
-    filtered = filtered.filter(t =>
-      t.description.toLowerCase().includes(search.trim().toLowerCase())
-    );
-  }
+  if (search.trim()) filtered = filtered.filter(t => t.description.toLowerCase().includes(search.trim().toLowerCase()));
   if (filterType !== "all") filtered = filtered.filter(t => t.type === filterType);
   if (filterCategory !== "all") filtered = filtered.filter(t => t.category === filterCategory);
+  if (filterMonth !== "all") filtered = filtered.filter(t => t.date.startsWith(filterMonth));
+
+  filtered = [...filtered].sort((a, b) => {
+    let cmp = 0;
+    if (sortBy === 'date') cmp = a.date.localeCompare(b.date);
+    if (sortBy === 'amount') cmp = a.amount - b.amount;
+    return sortDir === 'asc' ? cmp : -cmp;
+  });
 
   const fmt = (n) => n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
@@ -84,6 +103,14 @@ function TransactionList({ transactions, onEdit, onDelete }) {
           )}
         </div>
         <div className="filters">
+          <select className="filter-select" value={filterMonth} onChange={(e) => setFilterMonth(e.target.value)}>
+            <option value="all">All Months</option>
+            {months.map(m => (
+              <option key={m} value={m}>
+                {new Date(m + '-02').toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}
+              </option>
+            ))}
+          </select>
           <select className="filter-select" value={filterType} onChange={(e) => setFilterType(e.target.value)}>
             <option value="all">All Types</option>
             <option value="income">Income</option>
@@ -102,10 +129,14 @@ function TransactionList({ transactions, onEdit, onDelete }) {
       <table>
         <thead>
           <tr>
-            <th className="th-date">Date</th>
+            <th className="th-date th-sortable" onClick={() => handleSort('date')}>
+              Date <SortIcon column="date" sortBy={sortBy} sortDir={sortDir} />
+            </th>
             <th>Description</th>
             <th className="th-category">Category</th>
-            <th className="th-amount">Amount</th>
+            <th className="th-amount th-sortable" onClick={() => handleSort('amount')}>
+              Amount <SortIcon column="amount" sortBy={sortBy} sortDir={sortDir} />
+            </th>
             <th className="th-action"></th>
           </tr>
         </thead>
@@ -113,7 +144,7 @@ function TransactionList({ transactions, onEdit, onDelete }) {
           {filtered.length === 0 ? (
             <tr>
               <td colSpan="5" className="empty-state">
-                {search || filterType !== "all" || filterCategory !== "all"
+                {search || filterType !== "all" || filterCategory !== "all" || filterMonth !== "all"
                   ? "No transactions match your filters"
                   : "No transactions yet — add one above"}
               </td>

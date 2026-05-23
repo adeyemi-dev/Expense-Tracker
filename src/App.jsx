@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import './App.css'
 import AuthPage from './AuthPage'
 import Summary from './Summary'
+import SpendingChart from './SpendingChart'
 import TransactionForm from './TransactionForm'
 import TransactionList from './TransactionList'
 
@@ -100,6 +101,7 @@ function App() {
       </header>
 
       <Summary transactions={transactions} />
+      <SpendingChart transactions={transactions} />
       <TransactionForm
         onAdd={handleAdd}
         editingTransaction={editingTransaction}
