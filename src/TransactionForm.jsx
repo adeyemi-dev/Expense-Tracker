@@ -46,6 +46,10 @@ function TransactionForm({ onAdd, editingTransaction, onUpdate, onCancelEdit }) 
       onUpdate(transaction);
     } else {
       onAdd(transaction);
+      setDescription("");
+      setAmount("");
+      setType("expense");
+      setCategory("food");
     }
   };
 
