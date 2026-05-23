@@ -25,6 +25,7 @@ const toTitleCase = (str) => str.split(' ').map(w => w.charAt(0).toUpperCase() +
 const fmt = (n) => n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 
 function SpendingChart({ transactions }) {
+  const [open, setOpen] = useState(false)
   const [selectedMonth, setSelectedMonth] = useState('')
 
   const months = [...new Set(transactions.map(t => t.date.slice(0, 7)))].sort().reverse()
@@ -43,27 +44,6 @@ function SpendingChart({ transactions }) {
 
   const labels = Object.keys(grouped)
   const total = Object.values(grouped).reduce((s, v) => s + v, 0)
-
-  if (expenses.length === 0) {
-    return (
-      <div className="card">
-        <div className="section-header">
-          <h2 className="card-title" style={{ marginBottom: 0 }}>Spending Breakdown</h2>
-          {months.length > 0 && (
-            <select className="filter-select" value={selectedMonth} onChange={e => setSelectedMonth(e.target.value)}>
-              <option value="">All time</option>
-              {months.map(m => (
-                <option key={m} value={m}>
-                  {new Date(m + '-02').toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}
-                </option>
-              ))}
-            </select>
-          )}
-        </div>
-        <p className="empty-state" style={{ padding: '2rem 0' }}>No expense data to display</p>
-      </div>
-    )
-  }
 
   const chartData = {
     labels: labels.map(toTitleCase),
@@ -105,19 +85,35 @@ function SpendingChart({ transactions }) {
     <div className="card">
       <div className="section-header">
         <h2 className="card-title" style={{ marginBottom: 0 }}>Spending Breakdown</h2>
-        <select className="filter-select" value={selectedMonth} onChange={e => setSelectedMonth(e.target.value)}>
-          <option value="">All time</option>
-          {months.map(m => (
-            <option key={m} value={m}>
-              {new Date(m + '-02').toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}
-            </option>
-          ))}
-        </select>
+        <button className="chart-toggle-btn" onClick={() => setOpen(o => !o)}>
+          {open ? 'Hide' : 'Show'} <span className="chart-toggle-arrow">{open ? '▲' : '▼'}</span>
+        </button>
       </div>
-      <div className="chart-total">Total spent: £{fmt(total)}</div>
-      <div className="chart-wrapper">
-        <Doughnut data={chartData} options={options} />
-      </div>
+
+      {open && (
+        <>
+          <div className="chart-controls">
+            <select className="filter-select" value={selectedMonth} onChange={e => setSelectedMonth(e.target.value)}>
+              <option value="">All time</option>
+              {months.map(m => (
+                <option key={m} value={m}>
+                  {new Date(m + '-02').toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}
+                </option>
+              ))}
+            </select>
+          </div>
+          {expenses.length === 0 ? (
+            <p className="empty-state" style={{ padding: '2rem 0' }}>No expense data to display</p>
+          ) : (
+            <>
+              <div className="chart-total">Total spent: £{fmt(total)}</div>
+              <div className="chart-wrapper">
+                <Doughnut data={chartData} options={options} />
+              </div>
+            </>
+          )}
+        </>
+      )}
     </div>
   )
 }
