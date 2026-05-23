@@ -26,7 +26,8 @@ const BalanceIcon = () => (
   </svg>
 )
 
-function Summary({ transactions }) {
+function Summary({ transactions, currency }) {
+  const sym = currency?.symbol ?? '£';
   const totalIncome = transactions
     .filter(t => t.type === "income")
     .reduce((sum, t) => sum + t.amount, 0);
@@ -48,23 +49,23 @@ function Summary({ transactions }) {
       <div className="summary-card income">
         <span className="summary-card-icon"><IncomeIcon /></span>
         <p className="summary-card-label">Total Income</p>
-        <p className="income-amount">£{fmt(totalIncome)}</p>
+        <p className="income-amount">{sym}{fmt(totalIncome)}</p>
       </div>
       <div className="summary-card expense">
         <span className="summary-card-icon"><ExpenseIcon /></span>
         <p className="summary-card-label">Total Expenses</p>
-        <p className="expense-amount">£{fmt(totalExpenses)}</p>
+        <p className="expense-amount">{sym}{fmt(totalExpenses)}</p>
       </div>
       <div className="summary-card savings">
         <span className="summary-card-icon"><SavingsIcon /></span>
         <p className="summary-card-label">Total Savings</p>
-        <p className="savings-amount">£{fmt(totalSavings)}</p>
+        <p className="savings-amount">{sym}{fmt(totalSavings)}</p>
       </div>
       <div className="summary-card balance">
         <span className="summary-card-icon"><BalanceIcon /></span>
         <p className="summary-card-label">Balance</p>
         <p className={balance >= 0 ? 'income-amount' : 'expense-amount'}>
-          {balance < 0 ? '-' : ''}£{fmt(balance)}
+          {balance < 0 ? '-' : ''}{sym}{fmt(balance)}
         </p>
       </div>
     </div>

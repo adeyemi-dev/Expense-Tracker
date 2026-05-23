@@ -29,7 +29,8 @@ function SortIcon({ column, sortBy, sortDir }) {
   return <span className="sort-icon">{sortDir === 'asc' ? '↑' : '↓'}</span>;
 }
 
-function TransactionList({ transactions, onEdit, onDelete }) {
+function TransactionList({ transactions, onEdit, onDelete, currency }) {
+  const sym = currency?.symbol ?? '£';
   const [search, setSearch] = useState("");
   const [filterType, setFilterType] = useState("all");
   const [filterCategory, setFilterCategory] = useState("all");
@@ -68,7 +69,7 @@ function TransactionList({ transactions, onEdit, onDelete }) {
   const fmt = (n) => n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
   const exportToCSV = () => {
-    const headers = ['Date', 'Description', 'Type', 'Category', 'Amount (£)'];
+    const headers = ['Date', 'Description', 'Type', 'Category', `Amount (${sym})`];
     const rows = filtered.map(t => [
       t.date,
       `"${t.description.replace(/"/g, '""')}"`,
@@ -166,7 +167,7 @@ function TransactionList({ transactions, onEdit, onDelete }) {
                 </span>
               </td>
               <td className={`td-amount ${t.type === "income" ? "income-amount" : t.type === "savings" ? "savings-amount" : "expense-amount"}`}>
-                {t.type === "income" ? "+" : t.type === "savings" ? "→" : "−"}£{fmt(t.amount)}
+                {t.type === "income" ? "+" : t.type === "savings" ? "→" : "−"}{sym}{fmt(t.amount)}
               </td>
               <td className="td-action">
                 <button className="icon-btn icon-btn--edit" title="Edit" onClick={() => onEdit(t)}>

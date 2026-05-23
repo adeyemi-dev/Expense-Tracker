@@ -24,7 +24,8 @@ const toTitleCase = (str) => str.split(' ').map(w => w.charAt(0).toUpperCase() +
 
 const fmt = (n) => n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 
-function SpendingChart({ transactions }) {
+function SpendingChart({ transactions, currency }) {
+  const sym = currency?.symbol ?? '£';
   const [open, setOpen] = useState(false)
   const [selectedMonth, setSelectedMonth] = useState('')
 
@@ -74,7 +75,7 @@ function SpendingChart({ transactions }) {
         callbacks: {
           label: (ctx) => {
             const pct = ((ctx.raw / total) * 100).toFixed(1)
-            return `  £${fmt(ctx.raw)}  (${pct}%)`
+            return `  ${sym}${fmt(ctx.raw)}  (${pct}%)`
           },
         },
       },
@@ -106,7 +107,7 @@ function SpendingChart({ transactions }) {
             <p className="empty-state" style={{ padding: '2rem 0' }}>No expense data to display</p>
           ) : (
             <>
-              <div className="chart-total">Total spent: £{fmt(total)}</div>
+              <div className="chart-total">Total spent: {sym}{fmt(total)}</div>
               <div className="chart-wrapper">
                 <Doughnut data={chartData} options={options} />
               </div>

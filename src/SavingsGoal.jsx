@@ -2,7 +2,8 @@ import { useState } from 'react'
 
 const fmt = (n) => n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 
-function SavingsGoal({ transactions, userId }) {
+function SavingsGoal({ transactions, userId, currency }) {
+  const sym = currency?.symbol ?? '£';
   const storageKey = `ft-goal-${userId}`
 
   const [goal, setGoal] = useState(() => {
@@ -80,7 +81,7 @@ function SavingsGoal({ transactions, userId }) {
               />
             </div>
             <div className="form-field">
-              <label className="form-label">Target Amount (£)</label>
+              <label className="form-label">Target Amount ({sym})</label>
               <input
                 className="form-input"
                 type="number"
@@ -139,9 +140,9 @@ function SavingsGoal({ transactions, userId }) {
       </div>
 
       <div className="goal-amounts">
-        <span className="goal-saved">£{fmt(totalSavings)}</span>
+        <span className="goal-saved">{sym}{fmt(totalSavings)}</span>
         <span className="goal-separator"> of </span>
-        <span className="goal-target">£{fmt(goal.target)}</span>
+        <span className="goal-target">{sym}{fmt(goal.target)}</span>
         {goal.deadline && (
           <span className="goal-deadline">
             &nbsp;· Due {new Date(goal.deadline + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
@@ -157,7 +158,7 @@ function SavingsGoal({ transactions, userId }) {
         <span className="goal-pct">{pct.toFixed(1)}% reached</span>
         {reached
           ? <span className="goal-status goal-status--reached">🎉 Goal reached!</span>
-          : <span className="goal-status">£{fmt(goal.target - totalSavings)} to go</span>
+          : <span className="goal-status">{sym}{fmt(goal.target - totalSavings)} to go</span>
         }
       </div>
     </div>
