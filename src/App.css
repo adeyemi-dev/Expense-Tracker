@@ -861,6 +861,76 @@ td {
 }
 
 /* Confirm Dialog */
+/* Welcome Modal */
+.welcome-dialog {
+  max-width: 480px;
+  text-align: left;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.welcome-icon {
+  font-size: 40px;
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.welcome-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.4px;
+  margin-bottom: 4px;
+}
+
+.welcome-subtitle {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+}
+
+.welcome-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.welcome-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.welcome-feature-icon {
+  font-size: 20px;
+  line-height: 1.3;
+  flex-shrink: 0;
+}
+
+.welcome-features strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.welcome-features p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.welcome-btn {
+  width: 100%;
+  justify-content: center;
+  text-align: center;
+}
+
 .dialog-overlay {
   position: fixed;
   inset: 0;

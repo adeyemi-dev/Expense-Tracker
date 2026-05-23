@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 import AuthPage from './AuthPage'
+import WelcomeModal from './WelcomeModal'
 import Summary from './Summary'
 import SavingsGoal from './SavingsGoal'
 import SpendingChart from './SpendingChart'
@@ -46,6 +47,8 @@ function App() {
   const [editingTransaction, setEditingTransaction] = useState(null);
   const [isDark, setIsDark] = useState(() => localStorage.getItem('theme') === 'dark');
 
+  const [showWelcome, setShowWelcome] = useState(false);
+
   const [currencyCode, setCurrencyCode] = useState(() => {
     if (!currentUser) return 'GBP';
     return localStorage.getItem(`ft-currency-${currentUser.id}`) || 'GBP';
@@ -74,6 +77,14 @@ function App() {
     setTransactions(loadUserTransactions(user.id));
     setCurrencyCode(localStorage.getItem(`ft-currency-${user.id}`) || 'GBP');
     setEditingTransaction(null);
+    if (!localStorage.getItem(`ft-welcomed-${user.id}`)) {
+      setShowWelcome(true);
+    }
+  };
+
+  const handleDismissWelcome = () => {
+    localStorage.setItem(`ft-welcomed-${currentUser.id}`, '1');
+    setShowWelcome(false);
   };
 
   const handleLogout = () => {
@@ -136,6 +147,9 @@ function App() {
         </div>
       </header>
 
+      {showWelcome && (
+        <WelcomeModal name={firstName} onDismiss={handleDismissWelcome} />
+      )}
       <Summary transactions={transactions} currency={currency} />
       <SavingsGoal transactions={transactions} userId={currentUser.id} currency={currency} />
       <SpendingChart transactions={transactions} currency={currency} />
