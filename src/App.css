@@ -202,7 +202,8 @@
   display: flex;
   align-items: center;
   gap: 7px;
-  padding: 8px 16px;
+  height: 36px;
+  padding: 0 16px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -811,11 +812,13 @@ td {
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
 .currency-select {
-  padding: 8px 12px;
+  height: 36px;
+  padding: 0 10px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -826,6 +829,7 @@ td {
   color: var(--text-secondary);
   box-shadow: var(--shadow-sm);
   transition: all var(--transition);
+  max-width: 130px;
 }
 
 .currency-select:hover,
@@ -836,7 +840,8 @@ td {
 }
 
 .logout-btn {
-  padding: 8px 16px;
+  height: 36px;
+  padding: 0 16px;
   background: transparent;
   border: 1px solid var(--border);
   border-radius: var(--radius);

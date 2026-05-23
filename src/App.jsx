@@ -8,18 +8,18 @@ import TransactionForm from './TransactionForm'
 import TransactionList from './TransactionList'
 
 export const CURRENCIES = [
-  { code: 'GBP', symbol: '£',   label: 'GBP — British Pound' },
-  { code: 'USD', symbol: '$',   label: 'USD — US Dollar' },
-  { code: 'EUR', symbol: '€',   label: 'EUR — Euro' },
-  { code: 'NGN', symbol: '₦',   label: 'NGN — Nigerian Naira' },
-  { code: 'GHS', symbol: '₵',   label: 'GHS — Ghanaian Cedi' },
-  { code: 'KES', symbol: 'KSh', label: 'KES — Kenyan Shilling' },
-  { code: 'ZAR', symbol: 'R',   label: 'ZAR — South African Rand' },
-  { code: 'INR', symbol: '₹',   label: 'INR — Indian Rupee' },
-  { code: 'CAD', symbol: 'CA$', label: 'CAD — Canadian Dollar' },
-  { code: 'AUD', symbol: 'A$',  label: 'AUD — Australian Dollar' },
-  { code: 'JPY', symbol: '¥',   label: 'JPY — Japanese Yen' },
-  { code: 'AED', symbol: 'AED', label: 'AED — UAE Dirham' },
+  { code: 'GBP', symbol: '£',   flag: '🇬🇧', label: 'British Pound' },
+  { code: 'USD', symbol: '$',   flag: '🇺🇸', label: 'US Dollar' },
+  { code: 'EUR', symbol: '€',   flag: '🇪🇺', label: 'Euro' },
+  { code: 'NGN', symbol: '₦',   flag: '🇳🇬', label: 'Nigerian Naira' },
+  { code: 'GHS', symbol: '₵',   flag: '🇬🇭', label: 'Ghanaian Cedi' },
+  { code: 'KES', symbol: 'KSh', flag: '🇰🇪', label: 'Kenyan Shilling' },
+  { code: 'ZAR', symbol: 'R',   flag: '🇿🇦', label: 'South African Rand' },
+  { code: 'INR', symbol: '₹',   flag: '🇮🇳', label: 'Indian Rupee' },
+  { code: 'CAD', symbol: 'CA$', flag: '🇨🇦', label: 'Canadian Dollar' },
+  { code: 'AUD', symbol: 'A$',  flag: '🇦🇺', label: 'Australian Dollar' },
+  { code: 'JPY', symbol: '¥',   flag: '🇯🇵', label: 'Japanese Yen' },
+  { code: 'AED', symbol: 'د.إ', flag: '🇦🇪', label: 'UAE Dirham' },
 ]
 
 const loadUserTransactions = (userId) => {
@@ -124,7 +124,7 @@ function App() {
             title="Change currency"
           >
             {CURRENCIES.map(c => (
-              <option key={c.code} value={c.code}>{c.code} {c.symbol}</option>
+              <option key={c.code} value={c.code}>{c.flag} {c.code} — {c.label}</option>
             ))}
           </select>
           <button className="theme-toggle" onClick={() => setIsDark(d => !d)}>
