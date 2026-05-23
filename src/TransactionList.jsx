@@ -40,6 +40,13 @@ function TransactionList({ transactions, onEdit, onDelete }) {
 
   const months = [...new Set(transactions.map(t => t.date.slice(0, 7)))].sort().reverse();
 
+  const allCategories = [
+    ...categories,
+    ...transactions
+      .map(t => t.category)
+      .filter(c => !categories.includes(c)),
+  ];
+
   const handleSort = (col) => {
     if (sortBy === col) setSortDir(d => d === 'asc' ? 'desc' : 'asc');
     else { setSortBy(col); setSortDir(col === 'date' ? 'desc' : 'desc'); }
@@ -119,7 +126,7 @@ function TransactionList({ transactions, onEdit, onDelete }) {
           </select>
           <select className="filter-select" value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
             <option value="all">All Categories</option>
-            {categories.map(cat => (
+            {allCategories.map(cat => (
               <option key={cat} value={cat}>{toTitleCase(cat)}</option>
             ))}
           </select>

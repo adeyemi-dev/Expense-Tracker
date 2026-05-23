@@ -12,33 +12,40 @@ function TransactionForm({ onAdd, editingTransaction, onUpdate, onCancelEdit }) 
   const [amount, setAmount] = useState("");
   const [type, setType] = useState("expense");
   const [category, setCategory] = useState("food");
+  const [customCategory, setCustomCategory] = useState("");
   const cardRef = useRef(null);
 
   useEffect(() => {
     if (editingTransaction) {
+      const isKnown = categories.includes(editingTransaction.category);
       setDescription(editingTransaction.description);
       setAmount(String(editingTransaction.amount));
       setType(editingTransaction.type);
-      setCategory(editingTransaction.category);
+      setCategory(isKnown ? editingTransaction.category : "other");
+      setCustomCategory(isKnown ? "" : editingTransaction.category);
       cardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     } else {
       setDescription("");
       setAmount("");
       setType("expense");
       setCategory("food");
+      setCustomCategory("");
     }
   }, [editingTransaction]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!description || !amount) return;
+    if (category === "other" && !customCategory.trim()) return;
+
+    const resolvedCategory = category === "other" ? customCategory.trim().toLowerCase() : category;
 
     const transaction = {
       id: editingTransaction ? editingTransaction.id : Date.now(),
       description,
       amount: parseFloat(amount),
       type,
-      category,
+      category: resolvedCategory,
       date: editingTransaction ? editingTransaction.date : new Date().toISOString().split('T')[0],
     };
 
@@ -50,6 +57,7 @@ function TransactionForm({ onAdd, editingTransaction, onUpdate, onCancelEdit }) 
       setAmount("");
       setType("expense");
       setCategory("food");
+      setCustomCategory("");
     }
   };
 
@@ -96,8 +104,22 @@ function TransactionForm({ onAdd, editingTransaction, onUpdate, onCancelEdit }) 
               {categories.map(cat => (
                 <option key={cat} value={cat}>{toTitleCase(cat)}</option>
               ))}
+              <option value="other">Other…</option>
             </select>
           </div>
+          {category === "other" && (
+            <div className="form-field">
+              <label className="form-label">Custom Category</label>
+              <input
+                className="form-input"
+                type="text"
+                placeholder="e.g. Pet care, Medical…"
+                value={customCategory}
+                onChange={(e) => setCustomCategory(e.target.value)}
+                required
+              />
+            </div>
+          )}
           <div className="form-actions">
             {editingTransaction && (
               <button type="button" className="btn-secondary" onClick={onCancelEdit}>
