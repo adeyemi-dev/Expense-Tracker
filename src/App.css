@@ -271,9 +271,16 @@
   position: absolute;
   top: 18px;
   right: 18px;
-  font-size: 22px;
-  opacity: 0.18;
+  opacity: 0.2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
+.summary-card.income  .summary-card-icon { color: var(--income); }
+.summary-card.expense .summary-card-icon { color: var(--expense); }
+.summary-card.savings .summary-card-icon { color: var(--savings); }
+.summary-card.balance .summary-card-icon { color: var(--accent); }
 
 .income-amount  { color: var(--income);       font-size: 20px; font-weight: 700; letter-spacing: -0.3px; }
 .expense-amount { color: var(--expense);      font-size: 20px; font-weight: 700; letter-spacing: -0.3px; }
