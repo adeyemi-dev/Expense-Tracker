@@ -165,6 +165,9 @@ function App() {
         onDelete={handleDelete}
         currency={currency}
       />
+      <footer className="footer">
+        <p>Developed by <strong>Afeez Laguda</strong></p>
+      </footer>
     </div>
   );
 }

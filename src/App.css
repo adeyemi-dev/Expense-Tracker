@@ -159,6 +159,19 @@
   opacity: 0.5;
 }
 
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 28px 0 8px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.footer strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
 /* Layout */
 .app {
   max-width: 920px;
